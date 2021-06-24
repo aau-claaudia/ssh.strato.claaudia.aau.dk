@@ -1,0 +1,2 @@
+[gateways]
+ssh.strato.claaudia.aau.dk ansible_user=ubuntu ansible_port=990 ansible_become=yes

@@ -1,0 +1,5 @@
+---
+- name: move wwwroot
+  copy:
+    dest: /
+    src: wwwroot

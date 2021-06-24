@@ -1,0 +1,16 @@
+---
+  - hosts: gateways
+    roles:
+      - access
+      - name: jnv.unattended-upgrades
+        unattended_automatic_reboot: yes
+      - citen
+      - name: caddy_ansible.caddy_ansible
+        caddy_systemd_capabilities_enabled: true
+        caddy_config: |
+          {{ ansible_host }}
+          encode gzip
+          file_server {
+            root /wwwroot
+          }
+      - webpage

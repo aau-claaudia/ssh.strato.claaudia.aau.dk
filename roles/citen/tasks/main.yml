@@ -1,0 +1,14 @@
+---
+# well we should at some point have repository for deb packages, but this will do for now
+- name: move citen package
+  copy:
+    src: citen_0.0-20210623-0918-9adc669_amd64.deb
+    dest: /home/{{ ansible_user }}/citen_0.0-20210623-0918-9adc669_amd64.deb
+
+- name: install citen
+  apt: deb="/home/{{ ansible_user }}/citen_0.0-20210623-0918-9adc669_amd64.deb"
+
+# Notice: theres a bit more automation to be done:
+#   Ubuntu 18.04's systemd does not behave well with the default citen service definition
+#   You will need to move sshd out of the way
+# We will look into this when at some point we are running on 20.04
