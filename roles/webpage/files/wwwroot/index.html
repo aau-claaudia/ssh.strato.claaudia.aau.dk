@@ -141,18 +141,51 @@
     div.column{display: inline-block; vertical-align: top; width: 50%;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
     ul.task-list{list-style: none;}
+    .inputDiv {
+      float:left;
+      margin: 10px;
+    }
   </style>
   <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
   <![endif]-->
 </head>
 <body>
-<p><img src="Logo.png" /></p>
-<p>Access instances created in Claaudia’s strato environment though this ssh gateway:</p>
-<pre><code>ssh -J &lt;user&gt;@ssh.strato.claaudia.aau.dk &lt;user&gt;@&lt;internal-address&gt;</code></pre>
-<h2 id="usernames">Usernames</h2>
-<p>The username provided to the gateway must be identical to the username used to login into the instance - otherwise, authentication will fail.</p>
-<h2 id="ssh-keys">ssh keys</h2>
-<p>This gateway uses <a href="https://github.com/aau-claaudia/citen">citen</a>; It will accept the first ssh key provided to it - If you have multiple ssh keys, you may have to specify which to use explicitly. <a href="https://superuser.com/questions/772660/howto-force-ssh-to-use-a-specific-private-key">Learn more</a></p>
+  <p><img src="Logo.png" /></p>
+  <p>Access instances created in Claaudia’s strato environment though this ssh gateway:</p>
+  <pre><code>ssh -J &lt;user&gt;@ssh.strato.claaudia.aau.dk &lt;user&gt;@&lt;target&gt;</code></pre>
+  <h2 id="usernames">usernames</h2>
+  <p>The username provided to the gateway must be identical to the username used to login into the instance - otherwise, authentication will fail.</p>
+  <h2 id="ssh-keys">ssh keys</h2>
+  <p>This gateway uses <a href="https://github.com/aau-claaudia/citen">citen</a>; It will accept the first ssh key provided to it - If you have multiple ssh keys, you may have to specify which to use explicitly. <a href="https://superuser.com/questions/772660/howto-force-ssh-to-use-a-specific-private-key">Learn more</a></p>
+  <h2>config template</h2>
+  <p>Use the below generator to generate easy to use configurations for the ssh client.</p>
+  <div id="generator">
+      <div class="inputDiv">
+        <small>Key path</small><br>
+        <input type="text" v-model="key" placeholder="/home/user/.ssh/id_rsa"></input>
+      </div>
+      <div class="inputDiv">
+        <small>username</small><br>
+        <input type="text" v-model="username" placeholder="ubuntu"></input>
+      </div>
+      <div class="inputDiv">
+        <small>target</small><br>
+        <input type="text" v-model="target" placeholder="10.0.128.42"></input>
+      </div>
+      <pre style="clear: both;">Host {{ templateTarget }}
+    Hostname {{ templateTarget }}
+    User {{ templateUsername }}
+    IdentityFile {{ templateKey }}
+    IdentitiesOnly yes
+    ProxyCommand ssh -l{{ templateUsername }} -i {{ templateKey }} -o IdentitiesOnly=yes -W '[%h]:%p' ssh.strato.claaudia.aau.dk
+
+</pre>
+    <p>append the configuration to your $HOME/.ssh/config, and use it by simply connecting to the target directly:</p>
+    <pre>ssh {{ templateTarget }}</pre>
+  </div>
+  <script src="https://unpkg.com/vue"></script>
+  <script src="app.js"></script>
+
 </body>
 </html>
